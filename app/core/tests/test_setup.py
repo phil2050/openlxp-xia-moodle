@@ -21,11 +21,12 @@ class TestSetUp(TestCase):
             "LearningResourceIdentifier": "TestData 123",
             "SOURCESYSTEM": "JKO",
             "test_description": "test description",
+            "supplemental_data": "sample1"
         }
 
         self.key_value = "TestData 123_JKO"
         self.key_value_hash = "0a453b6bea6e7b1d25fb9799ef734f57"
-        self.hash_value = "7fc9cb8f88b2c12c421fcce38529d4c7"
+        self.hash_value = "f454114ba41034e14df2a8f3c14a047d"
 
         self.target_metadata = {
             "Course": {
@@ -181,6 +182,34 @@ class TestSetUp(TestCase):
             'provider_name': 'JKO'
         }
 
+        self.xia_supplemental_data = {
+            'metadata_record_uuid': UUID(
+                '09edea0e-6c83-40a6-951e-2acee3e99502'),
+            'supplemental_metadata': {
+                "Field1": "ABC",
+                "Field2": "123",
+                "Field3": "ABC-123"
+            },
+            'supplemental_metadata_hash': 'df0b51d7b45ca29682e930d236963584',
+            'supplemental_metadata_key': 'TestData 123_JKO',
+            'supplemental_metadata_key_hash':
+                '6acf7689ea81a1f792e7668a23b1acf5'
+        }
+
+        self.xis_supplemental_expected_data = {
+            'unique_record_identifier': UUID(
+                '09edea0e-6c83-40a6-951e-2acee3e99502'),
+            'metadata': {
+                "Field1": "ABC",
+                "Field2": "123",
+                "Field3": "ABC-123"
+            },
+            'metadata_hash': 'df0b51d7b45ca29682e930d236963584',
+            'metadata_key': 'TestData 123_JKO',
+            'metadata_key_hash':
+                '6acf7689ea81a1f792e7668a23b1acf5',
+            'provider_name': 'JKO'
+        }
         self.source_target_mapping = {
             "Course": {
                 "CourseProviderName": "SOURCESYSTEM",
@@ -204,6 +233,22 @@ class TestSetUp(TestCase):
                 "EndDate": "end_date"
             }
         }
+
+        self.test_metadata_column_list = [["Test", "Test_id", "Test_url"]]
+
+        self.source_metadata_with_supplemental = {
+            "Test": "0",
+            "Test_id": "2146",
+            "Test_url": "https://example.test.com/",
+            "supplemental_data1": "sample1",
+            "supplemental_data2": "sample2"
+        }
+
+        self.supplemental_data = {
+            "supplemental_data1": "sample1",
+            "supplemental_data2": "sample2"
+        }
+
         self.metadata_invalid = {
             "Test": "0",
             "Test_id": "2146",
@@ -261,6 +306,8 @@ class TestSetUp(TestCase):
             "key3": ["val3"]}
 
         self.xis_api_endpoint_url = 'http://openlxp-xis:8020/api/metadata/'
+        self.xis_supplemental_api_endpoint_url = 'http://openlxp-xis:8020' \
+                                                 '/api/supplemental-data/'
 
         self.receive_email_list = ['receiver1@openlxp.com',
                                    'receiver1@openlxp.com']

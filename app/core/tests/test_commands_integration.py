@@ -9,7 +9,7 @@ from django.utils import timezone
 from core.management.commands.extract_source_metadata import (
     extract_metadata_using_key, store_source_metadata)
 from core.management.commands.load_target_metadata import (
-    post_data_to_xis, renaming_xia_for_posting_to_xis)
+    post_data_to_xis, rename_metadata_ledger_fields)
 from core.management.commands.transform_source_metadata import (
     get_target_metadata_for_transformation, transform_source_using_key)
 from core.management.commands.validate_source_metadata import (
@@ -18,7 +18,8 @@ from core.management.commands.validate_source_metadata import (
 from core.management.commands.validate_target_metadata import (
     get_target_validation_schema, validate_target_using_key)
 from core.management.utils.xss_client import read_json_data
-from core.models import MetadataLedger, XIAConfiguration, XISConfiguration
+from core.models import (MetadataLedger, SupplementalLedger, XIAConfiguration,
+                         XISConfiguration)
 
 from .test_setup import TestSetUp
 
@@ -180,6 +181,7 @@ class CommandIntegration(TestSetUp):
 
         transform_source_using_key(test_data_dict, self.source_target_mapping,
                                    self.test_required_column_names)
+
         result_data = MetadataLedger.objects.filter(
             source_metadata_key=self.key_value,
             record_lifecycle_status='Active',
@@ -190,12 +192,33 @@ class CommandIntegration(TestSetUp):
             'target_metadata_key_hash',
             'target_metadata',
             'target_metadata_hash').first()
+
+        result_data_supplemental = SupplementalLedger.objects.filter(
+            supplemental_metadata_key=self.key_value,
+            record_lifecycle_status='Active',
+        ).values(
+            'supplemental_metadata_transformation_date',
+            'supplemental_metadata_key',
+            'supplemental_metadata_key_hash',
+            'supplemental_metadata',
+            'supplemental_metadata_hash').first()
+
         self.assertTrue(result_data.get('source_metadata_transformation_date'))
         self.assertTrue(result_data.get('target_metadata_key'))
         self.assertTrue(result_data.get('target_metadata_key_hash'))
         self.assertTrue(result_data.get('target_metadata'))
         self.assertTrue(result_data.get('target_metadata_hash'))
-    #
+        self.assertTrue(result_data_supplemental.
+                        get('supplemental_metadata_transformation_date'))
+        self.assertTrue(result_data_supplemental.
+                        get('supplemental_metadata_key'))
+        self.assertTrue(result_data_supplemental.
+                        get('supplemental_metadata_key_hash'))
+        self.assertTrue(result_data_supplemental.
+                        get('supplemental_metadata'))
+        self.assertTrue(result_data_supplemental.
+                        get('supplemental_metadata_hash'))
+
     # Test cases for validate_target_metadata
 
     def test_get_target_validation_schema(self):
@@ -264,12 +287,12 @@ class CommandIntegration(TestSetUp):
 
     # Test cases for load_target_metadata
 
-    def test_renaming_xia_for_posting_to_xis(self):
+    def test_rename_metadata_ledger_fields(self):
         """Test for Renaming XIA column names to match with XIS column names"""
         xiaConfig = XIAConfiguration(publisher='JKO')
         xiaConfig.save()
 
-        return_data = renaming_xia_for_posting_to_xis(self.xia_data)
+        return_data = rename_metadata_ledger_fields(self.xia_data)
         self.assertEquals(self.xis_expected_data['metadata_hash'],
                           return_data['metadata_hash'])
         self.assertEquals(self.xis_expected_data['metadata_key'],
@@ -307,7 +330,7 @@ class CommandIntegration(TestSetUp):
         xiaConfig = XIAConfiguration(publisher='JKO')
         xiaConfig.save()
         xisConfig = XISConfiguration(
-            xis_api_endpoint=self.xis_api_endpoint_url)
+            xis_metadata_api_endpoint=self.xis_api_endpoint_url)
         xisConfig.save()
         with patch('requests.post') as response_obj:
             response_obj.return_value = response_obj
@@ -351,7 +374,7 @@ class CommandIntegration(TestSetUp):
         xiaConfig = XIAConfiguration(publisher='JKO')
         xiaConfig.save()
         xisConfig = XISConfiguration(
-            xis_api_endpoint=self.xis_api_endpoint_url)
+            xis_metadata_api_endpoint=self.xis_api_endpoint_url)
         xisConfig.save()
         with patch('requests.post') as response_obj:
             response_obj.return_value = response_obj

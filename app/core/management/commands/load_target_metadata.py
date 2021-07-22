@@ -8,13 +8,13 @@ from django.db.models import Q
 from django.utils import timezone
 
 from core.management.utils.xia_internal import get_publisher_detail
-from core.management.utils.xis_client import response_from_xis
+from core.management.utils.xis_client import posting_metadata_ledger_to_xis
 from core.models import MetadataLedger
 
 logger = logging.getLogger('dict_config_logger')
 
 
-def renaming_xia_for_posting_to_xis(data):
+def rename_metadata_ledger_fields(data):
     """Renaming XIA column names to match with XIS column names"""
     data['unique_record_identifier'] = data.pop('metadata_record_uuid')
     data['metadata'] = data.pop('target_metadata')
@@ -30,7 +30,7 @@ def post_data_to_xis(data):
     """POSTing XIA metadata_ledger to XIS metadata_ledger"""
     # Traversing through each row one by one from data
     for row in data:
-        data = renaming_xia_for_posting_to_xis(row)
+        data = rename_metadata_ledger_fields(row)
         renamed_data = json.dumps(data, cls=DjangoJSONEncoder)
 
         # Getting UUID to update target_metadata_transmission_status to pending
@@ -43,7 +43,7 @@ def post_data_to_xis(data):
 
         # POSTing data to XIS
         try:
-            xis_response = response_from_xis(renamed_data)
+            xis_response = posting_metadata_ledger_to_xis(renamed_data)
 
             # Receiving XIS response after validation and updating
             # metadata_ledger
@@ -66,11 +66,16 @@ def post_data_to_xis(data):
                     + "error found " + xis_response.text)
         except requests.exceptions.RequestException as e:
             logger.error(e)
+            # Updating status in XIA metadata_ledger to 'Failed'
+            MetadataLedger.objects.filter(
+                metadata_record_uuid=uuid_val).update(
+                target_metadata_transmission_status='Failed')
             raise SystemExit('Exiting! Can not make connection with XIS.')
-    check_records_to_load_into_xis()
+
+    get_records_to_load_into_xis()
 
 
-def check_records_to_load_into_xis():
+def get_records_to_load_into_xis():
     """Retrieve number of Metadata_Ledger records in XIA to load into XIS  and
     calls the post_data_to_xis accordingly"""
     combined_query = MetadataLedger.objects.filter(
@@ -100,4 +105,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Metadata is load from XIA Metadata_Ledger to XIS Metadata_Ledger"""
-        check_records_to_load_into_xis()
+        get_records_to_load_into_xis()
