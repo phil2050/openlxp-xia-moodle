@@ -1,5 +1,6 @@
 from uuid import UUID
 
+import pandas as pd
 from django.test import TestCase
 
 
@@ -306,12 +307,15 @@ class TestSetUp(TestCase):
             "key3": ["val3"]}
 
         self.xis_api_endpoint_url = 'http://openlxp-xis:8020/api/metadata/'
-        self.xis_supplemental_api_endpoint_url = 'http://openlxp-xis:8020' \
-                                                 '/api/supplemental-data/'
+        self.supplemental_api_endpoint = 'http://openlxp-xis:8020' \
+                                         '/api/supplemental-data/'
 
         self.receive_email_list = ['receiver1@openlxp.com',
                                    'receiver1@openlxp.com']
         self.sender_email = "sender@openlxp.com"
+
+        self.metadata_df = pd.DataFrame.from_dict({1: self.source_metadata},
+                                                  orient='index')
 
         return super().setUp()
 
