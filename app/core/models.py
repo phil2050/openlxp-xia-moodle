@@ -5,7 +5,7 @@ from django.forms import ValidationError
 class XSRConfiguration(models.Model):
     """Model for XSR Configuration """
 
-    source_file = models.FileField(help_text='Upload the source '
+    source_file = models.FileField(help_text='Upload the excel source '
                                              'file')
 
     def save(self, *args, **kwargs):

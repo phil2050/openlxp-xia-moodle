@@ -53,7 +53,7 @@ services:
   celery:
     build:
       context: .
-    command: celery -A openlxp_xia_jko_project worker -l info
+    command: celery -A openlxp_xia_jko_project worker -l info --pool=solo
     volumes:
       - ./app:/opt/app/openlxp-xia-jko
     environment:
