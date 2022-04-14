@@ -24,8 +24,14 @@ class TestSetUp(TestCase):
         }
 
         self.key_value = "TestData 123_JKO"
-        self.key_value_hash = "0a453b6bea6e7b1d25fb9799ef734f57"
-        self.hash_value = "f454114ba41034e14df2a8f3c14a047d"
+        self.key_value_hash = \
+            "348a3c0ceae1888ea586252c6f66c9010917935237688771c638" \
+            "e46dfc50efb473a9d7ceded9f27b4c41f83a4d949d4382b5ace3" \
+            "912f5f7af59bcfc99c9f2d7f"
+        self.hash_value = \
+            "513a7f00940220c7839f5a0969afbdb6dff4a5d93b5af813287db6" \
+            "01885349670875f27fcedbee8aa7b2bbbae9617853c8f9b14098faa1" \
+            "92b2f1816a147ebd88"
 
         self.test_data = {
             "key1": ["val1"],
