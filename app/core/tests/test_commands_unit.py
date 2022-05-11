@@ -38,19 +38,7 @@ class CommandTests(TestSetUp):
             call_command('waitdb')
             self.assertEqual(gi.ensure_connection.call_count, 6)
 
-    # Test cases for extract_source_metadata
-    def test_get_source_metadata(self):
-        """ Test to retrieving source metadata"""
-        with patch('core.management.commands.extract_source_metadata'
-                   '.read_source_file') as read_obj, patch(
-            'core.management.commands.extract_source_metadata'
-            '.extract_metadata_using_key', return_value=None) as \
-                mock_extract_obj:
-            read_obj.return_value = read_obj
-            read_obj.return_value = [
-                pd.DataFrame.from_dict(self.test_data, orient='index')]
-            get_source_metadata()
-            self.assertEqual(mock_extract_obj.call_count, 1)
+    # Test case with extract_source_metadata
 
     def test_add_publisher_to_source(self):
         """Test for Add publisher column to source metadata and return
@@ -91,3 +79,17 @@ class CommandTests(TestSetUp):
             extract_metadata_using_key(data_df)
             self.assertEqual(mock_get_source.call_count, 1)
             self.assertEqual(mock_store_source.call_count, 1)
+
+    def test_get_source_metadata(self):
+        """Test to check extraction of source metadata as dataframe"""
+
+        with patch('core.management.commands.extract_source_metadata.'
+                   'read_source_file') as mock_read_source_file, \
+                patch('core.management.commands.extract_source_metadata.'
+                      'read_source_file') as mock_extract_metadata_using_key:
+            d = {'col1': [0, 1, 2, 3], 'col2': pd.Series([2, 3], index=[2, 3])}
+            df = pd.DataFrame(data=d, index=[0, 1, 2, 3])
+            mock_read_source_file.return_value = mock_read_source_file
+            mock_read_source_file.return_value = [df]
+            get_source_metadata()
+            self.assertEqual(mock_extract_metadata_using_key.call_count, 1)
