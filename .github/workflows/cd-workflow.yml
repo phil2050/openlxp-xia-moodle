@@ -5,7 +5,7 @@ on:
     branches: 
       - main
       - dev 
-      - action-ecr
+      - actions-ecr
   pull_request:
     branches: 
       - main
