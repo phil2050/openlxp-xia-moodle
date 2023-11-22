@@ -196,3 +196,12 @@ LOGGING = {
         }
     }
 }
+
+# Directory to store files during upload scanning
+
+if os.environ.get('TMP_SOURCE_DIR') is not None and\
+        len(os.environ.get('TMP_SOURCE_DIR')) > 0:
+    TMP_SOURCE_DIR = os.environ.get('TMP_SOURCE_DIR')
+else:
+    TMP_SOURCE_DIR = os.path.join(BASE_DIR, 'tmp', 'source')
+TMP_SOURCE_DIR = os.path.join(TMP_SOURCE_DIR, '')
