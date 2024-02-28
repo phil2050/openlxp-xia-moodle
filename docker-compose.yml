@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  db_xia_jko:
+  db_xia_coursera:
     image: mysql:5.7
     ports:
       - '3306:3306'
@@ -13,7 +13,7 @@ services:
     networks:
       - openlxp
 
-  app_xia_jko:
+  app_xia_coursera:
     build:
       context: .
     ports:
@@ -28,7 +28,6 @@ services:
       DJANGO_SUPERUSER_USERNAME: "${DJANGO_SUPERUSER_USERNAME}"
       DJANGO_SUPERUSER_PASSWORD: "${DJANGO_SUPERUSER_PASSWORD}"
       DJANGO_SUPERUSER_EMAIL: "${DJANGO_SUPERUSER_EMAIL}"
-      BUCKET_NAME: "${BUCKET_NAME}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
@@ -39,9 +38,9 @@ services:
       CELERY_BROKER_URL: "${CELERY_BROKER_URL}"
       CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND}"
     volumes:
-      - ./app:/opt/app/openlxp-xia-jko
+      - ./app:/opt/app/openlxp-xia-coursera
     depends_on:
-      - db_xia_jko
+      - db_xia_coursera
     networks:
       - openlxp
 
@@ -53,18 +52,18 @@ services:
   celery:
     build:
       context: .
-    command: celery -A openlxp_xia_jko_project worker -l info --pool=solo
+    command: celery -A openlxp_xia_coursera_project worker -l info --pool=solo
     volumes:
-      - ./app:/opt/app/openlxp-xia-jko
+      - ./app:/opt/app/openlxp-xia-coursera
     environment:
       REQUESTS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
       AWS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
     env_file:
       - ./.env
     depends_on:
-      - db_xia_jko
+      - db_xia_coursera
       - redis
-      - app_xia_jko
+      - app_xia_coursera
     networks:
       - openlxp
     restart: on-failure
@@ -72,18 +71,18 @@ services:
   celery-beat:
     build:
       context: .
-    command: celery -A openlxp_xia_jko_project beat --scheduler django_celery_beat.schedulers:DatabaseScheduler --loglevel=info --pidfile=/tmp/celerybeat.pid
+    command: celery -A openlxp_xia_coursera_project beat --scheduler django_celery_beat.schedulers:DatabaseScheduler --loglevel=info --pidfile=/tmp/celerybeat.pid
     volumes:
-      - ./app:/opt/app/openlxp-xia-jko
+      - ./app:/opt/app/openlxp-xia-coursera
     environment:
       REQUESTS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
       AWS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
     env_file:
       - ./.env
     depends_on:
-      - db_xia_jko
+      - db_xia_coursera
       - redis
-      - app_xia_jko
+      - app_xia_coursera
     networks:
       - openlxp
     restart: on-failure

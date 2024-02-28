@@ -1,14 +1,14 @@
-import secrets
-import string
-import magic
-import clamd
 import logging
 import os
+import secrets
+import string
 
+import clamd
+import magic
 from django.db import models
 from django.forms import ValidationError
 
-from openlxp_xia_jko_project import settings
+from openlxp_xia_coursera_project import settings
 
 logger = logging.getLogger('dict_config_logger')
 
