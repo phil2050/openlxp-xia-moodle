@@ -2,13 +2,14 @@
 
 
 include /etc/nginx/mime.types;
+client_max_body_size 100M;
 
 server {
     listen 8020;
     server_name example.org;
 
     location /static {
-        root /opt/app/openlxp-xia-jko;
+        root /opt/app/openlxp-xia-coursera;
     }
 
     location / {
