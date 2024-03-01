@@ -1,6 +1,7 @@
 import hashlib
 import logging
 
+import numpy as np
 import pandas as pd
 from openlxp_xia.management.utils.xia_internal import get_key_dict
 
@@ -13,11 +14,21 @@ def read_source_file():
     """setting file path from s3 bucket"""
     xsr_data = XSRConfiguration.objects.first()
     file_name = xsr_data.source_file
-    extracted_data = pd.read_excel(file_name, engine='openpyxl')
+    extracted_data1 = pd.read_excel(file_name,
+                                    sheet_name="All Enterprise Courses",
+                                    engine='openpyxl', skiprows=range(1, 3),
+                                    header=1)
+    extracted_data2 = pd.read_excel(file_name,
+                                    sheet_name="Projects", engine='openpyxl',
+                                    skiprows=range(1, 3), header=1)
+    extracted_data = pd.concat([extracted_data1, extracted_data2],
+                               ignore_index=True)
+
     std_source_df = extracted_data.where(pd.notnull(extracted_data),
                                          None)
+    source_nan_df = std_source_df.replace(np.nan, None)
     #  Creating list of dataframes of sources
-    source_list = [std_source_df]
+    source_list = [source_nan_df]
 
     logger.debug("Sending source data in dataframe format for EVTVL")
     # file_name.delete()
@@ -27,7 +38,7 @@ def read_source_file():
 def get_source_metadata_key_value(data_dict):
     """Function to create key value for source metadata """
     # field names depend on source data and SOURCESYSTEM is system generated
-    field = ['LearningResourceIdentifier', 'SOURCESYSTEM']
+    field = ['Course ID', 'SOURCESYSTEM']
     field_values = []
 
     for item in field:
