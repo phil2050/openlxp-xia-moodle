@@ -8,7 +8,6 @@ on:
   pull_request:
     branches: 
       - main
-      - dev
     types: [opened, synchronize, reopened]
   
 jobs:
@@ -42,13 +41,13 @@ jobs:
         git clone https://openlxp-host:${{ secrets.ACCESS_TOKEN }}@github.com/OpenLXP/openlxp-private.git
         echo "Private repository cloned successfully"
         echo "Copying .env file from openlxp-private to current working directory"
-        cp ./openlxp-private/openlxp-xia-jko-env/.env .
+        cp ./openlxp-private/openlxp-xia-coursera-env/.env .
         echo "Copied .env file successfully"
         echo "Create openlxp docker network"
         docker network create openlxp
         echo "Docker network successfully created"
         echo "Running coverage unit test"
-        docker-compose --env-file ./.env run app_xia_jko sh -c "python manage.py waitdb && coverage run manage.py test --tag=unit && flake8 && coverage report && coverage report --fail-under=80"
+        docker-compose --env-file ./.env run app_xia_coursera sh -c "python manage.py waitdb && coverage run manage.py test --tag=unit && flake8 && coverage report && coverage report --fail-under=80"
 
   # sonarcloud:
   #   name: SonarCloud
@@ -86,7 +85,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
-        IMAGE_TAG: xia-jko
+        IMAGE_TAG: xia-coursera
       run: |
         echo "Starting docker build"
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
