@@ -61,3 +61,11 @@ requests~=2.27.1
 s3fs==0.4.2
 
 xlrd >=2.0.1 , <2.1.0
+
+django-admin-interface>=0.28.3
+
+django-colorfield>=0.11.0
+
+python-slugify>=8.0.1
+
+text-unidecode>=1.3
