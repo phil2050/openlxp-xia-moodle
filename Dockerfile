@@ -13,17 +13,17 @@ RUN if [ ! -f /etc/debug.log ]; then touch /etc/debug.log ; fi
 RUN chmod a=rwx /etc/debug.log
 
 # copy source and install dependencies
-RUN mkdir -p /opt/app
-RUN mkdir -p /opt/app/pip_cache
-RUN mkdir -p /opt/app/openlxp-xia-coursera
-COPY requirements.txt start-server.sh start-app.sh /opt/app/
-RUN chmod +x /opt/app/start-server.sh
-RUN chmod +x /opt/app/start-app.sh
-COPY ./app /opt/app/openlxp-xia-coursera/
-WORKDIR /opt/app
-RUN pip install -r requirements.txt --cache-dir /opt/app/pip_cache
-RUN chown -R www-data:www-data /opt/app
-WORKDIR /opt/app/openlxp-xia-coursera/
+RUN mkdir -p /tmp/app
+RUN mkdir -p /tmp/app/pip_cache
+RUN mkdir -p /tmp/app/openlxp-xia-coursera
+COPY requirements.txt start-server.sh start-app.sh /tmp/app/
+RUN chmod +x /tmp/app/start-server.sh
+RUN chmod +x /tmp/app/start-app.sh
+COPY ./app /tmp/app/openlxp-xia-coursera/
+WORKDIR /tmp/app
+RUN pip install -r requirements.txt --cache-dir /tmp/app/pip_cache
+RUN chown -R www-data:www-data /tmp/app
+WORKDIR /tmp/app/openlxp-xia-coursera/
 RUN freshclam
 RUN service clamav-daemon start
 
