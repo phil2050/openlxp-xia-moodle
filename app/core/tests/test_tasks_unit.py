@@ -39,7 +39,10 @@ class TasksTests(TestSetUp):
                 patch('core.tasks.load_Command.handle') as mock_load, \
                 patch('core.tasks.'
                       'load_supplemental_Command.'
-                      'handle') as mock_load_supplemental:
+                      'handle') as mock_load_supplemental, \
+                patch('core.tasks.'
+                      'conformance_alerts_Command.'
+                      'handle') as mock_conformance:
 
             execute_xia_automated_workflow.run()
 
@@ -49,3 +52,4 @@ class TasksTests(TestSetUp):
             self.assertEqual(mock_validate_target.call_count, 1)
             self.assertEqual(mock_load.call_count, 1)
             self.assertEqual(mock_load_supplemental.call_count, 1)
+            self.assertEqual(mock_conformance.call_count, 1)
