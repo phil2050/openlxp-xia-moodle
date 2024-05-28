@@ -37,6 +37,11 @@ services:
       LOG_PATH: "${LOG_PATH}"
       CELERY_BROKER_URL: "${CELERY_BROKER_URL}"
       CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND}"
+      P1PS_DOMAIN: "${P1PS_DOMAIN}"
+      TEAM_TOKEN: "${TEAM_TOKEN}"
+      TEAM_ID: "${TEAM_ID}"
+      COOKIE_NAME: "${COOKIE_NAME}"
+      COOKIE_VALUE: "${COOKIE_VALUE}"
     volumes:
       - ./app:/opt/app/openlxp-xia-coursera
     depends_on:
