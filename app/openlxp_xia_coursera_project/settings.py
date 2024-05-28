@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core',
     'openlxp_xia',
     'openlxp_notifications',
+    'openlxp_P1_notification',
     'django_celery_beat',
     'django_celery_results',
 ]
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'openlxp_P1_notification.middleware.TemplateMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -91,8 +93,12 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': 3306,
-    }
+        'OPTIONS': {
+                    'charset': 'utf8mb4',
+                }
+            },
 }
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
