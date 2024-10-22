@@ -20,7 +20,8 @@ from django.urls import include, path
 
 admin.autodiscover_modules()
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('api/', include('api.urls')),
-
+                path('admin/', admin.site.urls),
+                path('api/', include('api.urls')),
+                path('health/', include('health_check.urls'),
+            name='health_check')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
