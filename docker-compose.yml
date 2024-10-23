@@ -17,9 +17,9 @@ services:
     build:
       context: .
     ports:
-      - "8000:8020"
+      - "8010:8020"
     command: >
-      sh -c ". /opt/app/start-app.sh"
+      sh -c ". /tmp/app/start-app.sh"
     environment:
       DB_NAME: "${DB_NAME}"
       DB_USER: "${DB_USER}"
@@ -43,7 +43,7 @@ services:
       COOKIE_NAME: "${COOKIE_NAME}"
       COOKIE_VALUE: "${COOKIE_VALUE}"
     volumes:
-      - ./app:/opt/app/openlxp-xia-coursera
+      - ./app:/tmp/app/openlxp-xia-coursera
     depends_on:
       - db_xia_coursera
     networks:
@@ -59,7 +59,7 @@ services:
       context: .
     command: celery -A openlxp_xia_coursera_project worker -l info --pool=solo
     volumes:
-      - ./app:/opt/app/openlxp-xia-coursera
+      - ./app:/tmp/app/openlxp-xia-coursera
     environment:
       REQUESTS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
       AWS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
@@ -78,7 +78,7 @@ services:
       context: .
     command: celery -A openlxp_xia_coursera_project beat --scheduler django_celery_beat.schedulers:DatabaseScheduler --loglevel=info --pidfile=/tmp/celerybeat.pid
     volumes:
-      - ./app:/opt/app/openlxp-xia-coursera
+      - ./app:/tmp/app/openlxp-xia-coursera
     environment:
       REQUESTS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
       AWS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
