@@ -46,21 +46,25 @@ INSTALLED_APPS = [
     'core',
     'openlxp_xia',
     'openlxp_notifications',
-    'openlxp_P1_notification',
+    # 'openlxp_P1_notification',
     'django_celery_beat',
     'django_celery_results',
+    'health_check',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'openlxp_P1_notification.middleware.TemplateMiddleware',
+    # 'openlxp_P1_notification.middleware.TemplateMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SECURE_SSL_REDIRECT = True
+SECURE_REDIRECT_EXEMPT = ['health/', 'api/health/']
 
 ROOT_URLCONF = 'openlxp_xia_coursera_project.urls'
 
