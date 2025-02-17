@@ -9,7 +9,7 @@ server {
     server_name example.org;
 
     location /static {
-        root /tmp/app/openlxp-xia-coursera;
+        root /tmp/app/openlxp-xia-moodle;
     }
 
     location / {

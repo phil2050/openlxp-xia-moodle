@@ -11,9 +11,9 @@ python manage.py loaddata openlxp_notification_subject.json
 python manage.py loaddata openlxp_notification_email.json 
 cd /tmp/app/ 
 if [ -n "$TMP_SOURCE_DIR" ] ; then 
-    (cd openlxp-xia-coursera; install -d -o www-data -p $TMP_SOURCE_DIR) 
+    (cd openlxp-xia-moodle; install -d -o www-data -p $TMP_SOURCE_DIR) 
 else 
-    (cd openlxp-xia-coursera; install -d -o www-data -p tmp/source) 
+    (cd openlxp-xia-moodle; install -d -o www-data -p tmp/source) 
 fi 
 pwd 
 service clamav-daemon restart 

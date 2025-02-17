@@ -18,7 +18,7 @@ class TestSetUp(TestCase):
             "test_name": "test name",
             "Start_date": "2017-03-28T00:00:00-04:00",
             "LearningResourceIdentifier": "TestData 123",
-            "SOURCESYSTEM": "coursera",
+            "SOURCESYSTEM": "moodle",
             "test_description": "test description",
             "supplemental_data": "sample1"
         }

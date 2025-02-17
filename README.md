@@ -1,5 +1,4 @@
-
-# Enterprise Course Catalog: OPENLXP-XIA-COURSERA
+# Enterprise Course Catalog: OPENLXP-XIA-MOODLE
 
 The Enterprise Course Catalog (ECC) is one of the three Enterprise Digital Learning Modernization (EDLM) lines of an effort supported by ADL. Today, learner records for Department of Defense (DoD) personnel are stored in disparate locations, along with inconsistent data formats, which complicates the transport, management, and governance of the learner records across and within DoD organizations.  
 
@@ -8,7 +7,7 @@ The goal of the ECC is a learning experience discovery service designed to aggre
 ECC system architecture comprises multiple independently deployable components.Each component offers its unique data architecture.This component is one of those Experience Index Agent (XIA) components. XIAs interact with specific XSRs (Experience Schema Services) to extract, transform, and load operations for learning experience metadata.   
 
 # Workflows
-The Coursera XIA implements six core workflows, as follows:
+The Moodle XIA implements six core workflows, as follows:
 
 1. `Extract`: Pulls pertinent learning experience metadata records from the corresponding Experience Source Repository (XSR).
 
@@ -74,11 +73,11 @@ To run this project, you will need to add the following environment variables to
 
 1. Clone the Github repository:
 
-    https://github.com/OpenLXP/openlxp-xia-coursera.git
+    https://github.com/OpenLXP/openlxp-xia-moodle.git
 
 2. Open terminal at the root directory of the project.
     
-    example: ~/PycharmProjects/openlxp-xia-coursera 
+    example: ~/PycharmProjects/openlxp-xia-moodle 
 
 3. Run command to install all the requirements from requirements.txt 
     
@@ -100,7 +99,7 @@ To run this project, you will need to add the following environment variables to
 
 2. `Add xsr configuration`: Configure Experience Source Repository (XSR):
     
-    `source_file`: Upload the Excel source metadata file of coursera here. 
+    `source_file`: Upload the Excel source metadata file of moodle here. 
 
 
 #### Note : Validation, transformation & loading are executed by the openlxp-xia package which is imported. The celery task calls the commands from the package and executes it.

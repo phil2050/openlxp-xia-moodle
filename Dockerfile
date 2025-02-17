@@ -14,15 +14,15 @@ RUN chmod a=rwx /etc/debug.log
 # copy source and install dependencies
 RUN mkdir -p /tmp/app
 RUN mkdir -p /tmp/app/pip_cache
-RUN mkdir -p /tmp/app/openlxp-xia-coursera
+RUN mkdir -p /tmp/app/openlxp-xia-moodle
 COPY requirements.txt start-server.sh start-app.sh /tmp/app/
 RUN chmod +x /tmp/app/start-server.sh
 RUN chmod +x /tmp/app/start-app.sh
-COPY ./app /tmp/app/openlxp-xia-coursera/
+COPY ./app /tmp/app/openlxp-xia-moodle/
 WORKDIR /tmp/app
 RUN pip install -r requirements.txt --cache-dir /tmp/app/pip_cache
 RUN chown -R www-data:www-data /tmp/app
-WORKDIR /tmp/app/openlxp-xia-coursera/
+WORKDIR /tmp/app/openlxp-xia-moodle/
 RUN freshclam
 RUN service clamav-daemon start
 

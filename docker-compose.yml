@@ -1,7 +1,5 @@
-version: "3"
-
 services:
-  db_xia_coursera:
+  db_xia_moodle:
     image: mysql:8.0.36
     ports:
       - '3306:3306'
@@ -13,7 +11,7 @@ services:
     networks:
       - openlxp
 
-  app_xia_coursera:
+  app_xia_moodle:
     build:
       context: .
     ports:
@@ -43,9 +41,9 @@ services:
       COOKIE_NAME: "${COOKIE_NAME}"
       COOKIE_VALUE: "${COOKIE_VALUE}"
     volumes:
-      - ./app:/tmp/app/openlxp-xia-coursera
+      - ./app:/tmp/app/openlxp-xia-moodle
     depends_on:
-      - db_xia_coursera
+      - db_xia_moodle
     networks:
       - openlxp
 
@@ -57,18 +55,18 @@ services:
   celery:
     build:
       context: .
-    command: celery -A openlxp_xia_coursera_project worker -l info --pool=solo
+    command: celery -A openlxp_xia_moodle_project worker -l info --pool=solo
     volumes:
-      - ./app:/tmp/app/openlxp-xia-coursera
+      - ./app:/tmp/app/openlxp-xia-moodle
     environment:
       REQUESTS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
       AWS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
     env_file:
       - ./.env
     depends_on:
-      - db_xia_coursera
+      - db_xia_moodle
       - redis
-      - app_xia_coursera
+      - app_xia_moodle
     networks:
       - openlxp
     restart: on-failure
@@ -76,18 +74,18 @@ services:
   celery-beat:
     build:
       context: .
-    command: celery -A openlxp_xia_coursera_project beat --scheduler django_celery_beat.schedulers:DatabaseScheduler --loglevel=info --pidfile=/tmp/celerybeat.pid
+    command: celery -A openlxp_xia_moodle_project beat --scheduler django_celery_beat.schedulers:DatabaseScheduler --loglevel=info --pidfile=/tmp/celerybeat.pid
     volumes:
-      - ./app:/tmp/app/openlxp-xia-coursera
+      - ./app:/tmp/app/openlxp-xia-moodle
     environment:
       REQUESTS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
       AWS_CA_BUNDLE: '/etc/ssl/certs/ca-certificates.pem'
     env_file:
       - ./.env
     depends_on:
-      - db_xia_coursera
+      - db_xia_moodle
       - redis
-      - app_xia_coursera
+      - app_xia_moodle
     networks:
       - openlxp
     restart: on-failure
